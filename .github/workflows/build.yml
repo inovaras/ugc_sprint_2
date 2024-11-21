@@ -25,7 +25,6 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install wemake-python-styleguide flake8-html mypy pytest pytest-html
           if [ -f app/requirements.txt ]; then pip install -r app/requirements.txt; fi
 
       - name: Lint with wemake-python-styleguide
@@ -58,7 +57,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y docker-compose
-          mkdir -p reports/pytest
           docker-compose -f app/tests/functional/docker-compose.test.yaml up --abort-on-container-exit
           docker-compose -f app/tests/functional/docker-compose.test.yaml down
 
@@ -67,7 +65,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: pytest-report-${{ matrix.python-version }}
-          path: reports/pytest
+          path: app/reports/pytest
+
+      - name: Clean up reports folder in app
+        if: always()
+        run: |
+          rm -rf app/reports
 
   notify:
     needs: lint-and-test

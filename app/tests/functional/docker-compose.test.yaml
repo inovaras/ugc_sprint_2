@@ -52,7 +52,7 @@ services:
     command: >
             sh -c "export PYTHONPATH=$(pwd):$PYTHONPATH
             && python tests/functional/utils/waiters.py
-            && pytest tests/functional/src --log-cli-level=INFO -s --html=reports/pytest/report.html --self-contained-html""
+            && pytest tests/functional/src --log-cli-level=INFO -s --html=reports/pytest/report.html --self-contained-html"
 
 volumes:
   mongodb_data:
