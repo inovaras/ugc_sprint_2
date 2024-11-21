@@ -85,4 +85,4 @@ docker image prune -f
   }
 }
 ```
-6. Добавте ID чата в Github SECRET под именем `TELEGRAM_CHAT_ID`
+6. Добавьте ID чата в Github SECRET под именем `TELEGRAM_CHAT_ID`
