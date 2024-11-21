@@ -80,4 +80,9 @@ jobs:
       run: |
         curl -s -X POST https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage \
           -d chat_id=$TELEGRAM_CHAT_ID \
-          -d text="✅ CI passed successfully for branch: $GITHUB_REF!"
+          -d text="✅ CI passed successfully for branch: $GITHUB_REF!
+          Commit: ${{ github.sha }}
+          Author: ${{ github.actor }}
+          Repository: ${{ github.repository }}
+          Workflow: ${{ github.workflow }}
+          Job: ${{ github.job }}"
