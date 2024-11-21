@@ -32,17 +32,38 @@ jobs:
         run: |
           mkdir -p reports/flake8
           flake8 app/ --format=html --htmldir=reports/flake8 --max-line-length=88 --max-complexity=10
+      
+      - name: Upload flake8 report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flake8-report-${{ matrix.python-version }}
+          path: reports/flake8
 
       - name: Check types with mypy
         run: |
           mkdir -p reports/mypy
           mypy app/ --html-report reports/mypy --strict
+      
+      - name: Upload mypy report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mypy-report-${{ matrix.python-version }}
+          path: reports/mypy
 
       - name: Run tests with Docker Compose
         run: |
           mkdir -p reports/pytest
           docker-compose -f app/tests/functional/docker-compose.test.yaml up --abort-on-container-exit
           docker-compose -f app/tests/functional/docker-compose.test.yaml down
+
+      - name: Upload pytest report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-report-${{ matrix.python-version }}
+          path: reports/pytest
 
       - name: Upload report
         if: always()
