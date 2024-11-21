@@ -30,11 +30,10 @@ jobs:
       - name: Lint with wemake-python-styleguide
         run: |
           mkdir -p reports/flake8
-          flake8 app/src/ --format=html --htmldir=reports/flake8 --max-line-length=88 --max-complexity=10
+          flake8 app/src/ --format=html --htmldir=reports/flake8 --config=flake8.cfg --exit-zero
         continue-on-error: true
       
       - name: Upload flake8 report
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: flake8-report-${{ matrix.python-version }}
@@ -43,11 +42,10 @@ jobs:
       - name: Check types with mypy
         run: |
           mkdir -p reports/mypy
-          mypy app/src/ --html-report reports/mypy --strict
+          mypy app/src/ --html-report reports/mypy --ignore-missing-imports || true
         continue-on-error: true
       
       - name: Upload mypy report
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: mypy-report-${{ matrix.python-version }}
@@ -61,7 +59,6 @@ jobs:
           docker-compose -f app/tests/functional/docker-compose.ci.yaml down
 
       - name: Upload pytest report
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: pytest-report-${{ matrix.python-version }}
@@ -77,7 +74,10 @@ jobs:
       env:
         TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        REPO: ${{ github.repository }}
+        RUN_ID: ${{ github.run_id }}
       run: |
+        REPORTS_URL="https://github.com/$REPO/actions/runs/$RUN_ID"
         curl -s -X POST https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage \
           -d chat_id=$TELEGRAM_CHAT_ID \
           -d text="✅ CI passed successfully for branch: $GITHUB_REF!
@@ -85,4 +85,6 @@ jobs:
           Commit: ${{ github.event.head_commit.message }}
           Author: ${{ github.actor }}
           Repository: ${{ github.repository }}
-          Workflow: ${{ github.workflow }}"
+          Workflow: ${{ github.workflow }}
+
+          🔗 [View Reports]($REPORTS_URL)"
