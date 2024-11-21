@@ -1,6 +1,6 @@
 # Проектная работа 9 спринта. Проект по тестированию CI
 
-Приложение на FastAPI и развернутым кластером MongoDB, состоящим  из двух шардов (наборы реплик по три узла), серверов конфигурации (три узла реплик) и двух маршрутизаторов Mongos.
+Приложение на FastAPI и c развернутым кластером MongoDB, состоящим  из двух шардов (наборы реплик по три узла), серверов конфигурации (три узла реплик) и двух маршрутизаторов Mongos.
 
 Приложение позволяет смотреть статистику оценок, выставленных пользователями конкретному фильму.
 
@@ -55,7 +55,7 @@ docker-compose -f app/tests/functional/docker-compose.yaml -p practicum_rating_t
 
 ### Удаление контейнеров и томов после тестов
 ```
-docker-compose -f app/tests/functional/docker-compose.yaml -p practicum_test down -v
+docker-compose -f app/tests/functional/docker-compose.yaml -p practicum_rating_test down -v
 docker image prune -f
 ```
 
