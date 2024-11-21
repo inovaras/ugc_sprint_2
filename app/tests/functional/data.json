@@ -1,0 +1,47 @@
+{
+    "users": [
+      {
+        "_id": "63a8d1e2-2b54-4b9e-a2cb-1d412f3c4e54",
+        "name": "Admin User",
+        "email": "admin@example.com",
+        "ratings": []
+      },
+      {
+        "_id": "84b5f7a9-7dcd-45a8-9ec5-5f39d4419d54",
+        "name": "Regular User",
+        "email": "user@example.com",
+        "ratings": []
+      }
+    ],
+    "movies": [
+      {
+        "_id": "4a82f1d4-8e94-4e4e-8d0c-845f4a25b733",
+        "title": "Inception",
+        "release_year": 2010,
+        "ratings": {"average": 0, "count": 0}
+      },
+      {
+        "_id": "9c2bdef3-ec9d-4aaf-9c1e-d2b60c1a892b",
+        "title": "The Matrix",
+        "release_year": 1999,
+        "ratings": {"average": 0, "count": 0}
+      }
+    ],
+    "ratings": [
+      {
+        "_id": "1e4e8b9d-7b3d-42a5-82e8-1f3d5e3c1a4f",
+        "user_id": "63a8d1e2-2b54-4b9e-a2cb-1d412f3c4e54",
+        "movie_id": "4a82f1d4-8e94-4e4e-8d0c-845f4a25b733",
+        "rating": 4.5,
+        "timestamp": "2024-11-20T22:00:00Z"
+      },
+      {
+        "_id": "3c9a2b4e-1b5d-4c8e-a3f4-e2d5c5a4e3b2",
+        "user_id": "84b5f7a9-7dcd-45a8-9ec5-5f39d4419d54",
+        "movie_id": "9c2bdef3-ec9d-4aaf-9c1e-d2b60c1a892b",
+        "rating": 3.7,
+        "timestamp": "2024-11-20T22:30:00Z"
+      }
+    ]
+  }
+  

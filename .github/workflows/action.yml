@@ -1,0 +1,67 @@
+name: UGC application
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ "3.9", "3.10", "3.11"]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+    
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+        
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install wemake-python-styleguide mypy pytest pytest-html
+          if [ -f app/requirements.txt ]; then pip install -r app/requirements.txt; fi
+
+      - name: Lint with wemake-python-styleguide
+        run: |
+          mkdir -p reports/flake8
+          flake8 app/ --format=html --htmldir=reports/flake8 --max-line-length=88 --max-complexity=10
+
+      - name: Check types with mypy
+        run: |
+          mkdir -p reports/mypy
+          mypy app/ --html-report reports/mypy --strict
+
+      - name: Run tests with Docker Compose
+        run: |
+          mkdir -p reports/pytest
+          docker-compose -f app/tests/functional/docker-compose.test.yaml up --abort-on-container-exit
+          docker-compose -f app/tests/functional/docker-compose.test.yaml down
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: reports
+
+  notify:
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    if: success()
+
+    steps:
+    - name: Send Telegram notification
+      env:
+        TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      run: |
+        curl -s -X POST https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage \
+          -d chat_id=$TELEGRAM_CHAT_ID \
+          -d text="✅ CI passed successfully for branch: $GITHUB_REF!"

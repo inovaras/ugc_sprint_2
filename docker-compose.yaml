@@ -1,0 +1,36 @@
+include:
+  - ./mongo/docker-compose.yaml
+
+x-app: &app
+  env_file:
+    - ./.env
+  restart: always
+  platform: linux/amd64
+
+services:
+  ugc:
+    container_name: ugc
+    build:
+      context: ./app
+    <<: *app
+    volumes:
+      - ./app:/usr/src/app/
+    depends_on:
+      mongos1:
+        condition: service_healthy
+    ports:
+      - 8002:8000
+    expose:
+      - "8000"
+
+  mongo_start:
+    container_name: mongo_start
+    image: mongo
+    depends_on:
+      - mongocfg1
+      - mongocfg2
+      - mongocfg3
+    volumes:
+      - ./mongo/init_mongo_cluster.sh:/init_mongo_cluster.sh
+    entrypoint: ["/bin/bash", "/init_mongo_cluster.sh"]
+    restart: "no"
