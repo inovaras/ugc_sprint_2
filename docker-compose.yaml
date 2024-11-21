@@ -23,6 +23,17 @@ services:
     expose:
       - "8000"
 
+  nginx:
+    container_name: nginx
+    image: nginx:1.25
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      - ugc
+    ports:
+      - 82:80
+
   mongo_start:
     container_name: mongo_start
     image: mongo
