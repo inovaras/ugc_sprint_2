@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install wemake-python-styleguide mypy pytest pytest-html
+          pip install wemake-python-styleguide flake8-html mypy pytest pytest-html
           if [ -f app/requirements.txt ]; then pip install -r app/requirements.txt; fi
 
       - name: Lint with wemake-python-styleguide
