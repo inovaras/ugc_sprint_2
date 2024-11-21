@@ -30,7 +30,7 @@ jobs:
       - name: Lint with wemake-python-styleguide
         run: |
           mkdir -p reports/flake8
-          flake8 app/ --format=html --htmldir=reports/flake8 --max-line-length=88 --max-complexity=10
+          flake8 app/src/ --format=html --htmldir=reports/flake8 --max-line-length=88 --max-complexity=10
         continue-on-error: true
       
       - name: Upload flake8 report
@@ -43,7 +43,7 @@ jobs:
       - name: Check types with mypy
         run: |
           mkdir -p reports/mypy
-          mypy app/ --html-report reports/mypy --strict
+          mypy app/src/ --html-report reports/mypy --strict
         continue-on-error: true
       
       - name: Upload mypy report
