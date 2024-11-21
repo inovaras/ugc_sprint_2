@@ -37,6 +37,7 @@ services:
       context: ../../
     container_name: tests
     environment:
+      PYTHONPATH: '/usr/src/app'
       MONGO_HOST: mongo_test
       MONGO_PORT: 27017
       SERVICE_HOST: app_test
@@ -50,8 +51,7 @@ services:
       - ../../:/usr/src/app
       - ../../reports:/usr/src/app/reports
     command: >
-        sh -c "export PYTHONPATH=\$(pwd):\$PYTHONPATH
-        && python tests/functional/utils/waiters.py
+        sh -c "python tests/functional/utils/waiters.py
         && pytest tests/functional/src --log-cli-level=INFO -s --html=reports/pytest/report.html --self-contained-html"
 
 volumes:

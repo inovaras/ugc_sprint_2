@@ -25,12 +25,12 @@ python generation/main.py --count-users 5000 --count-movies 1000 --count-ratings
 
 ## Выполнение тестов
 ```
-docker-compose -f app/tests/functional/docker-compose.test.yaml -p practicum_rating_test up --build --abort-on-container-exit
+docker-compose -f app/tests/functional/docker-compose.yaml -p practicum_rating_test up --build --abort-on-container-exit
 ```
 
 ### Удаление контейнеров и томов после тестов
 ```
-docker-compose -f app/tests/functional/docker-compose.test.yaml -p practicum_test down -v
+docker-compose -f app/tests/functional/docker-compose.yaml -p practicum_test down -v
 docker image prune -f
 ```
 

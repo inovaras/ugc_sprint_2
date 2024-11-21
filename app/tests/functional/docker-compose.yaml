@@ -1,0 +1,58 @@
+services:
+  # MongoDB сервис
+  mongo_test:
+    image: mongo:8.0
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Приложение (FastAPI)
+  app_test:
+    build:
+      context: ../../
+    container_name: app
+    environment:
+      MONGO_HOST: mongo_test
+      MONGO_PORT: 27017
+      SERVICE_HOST: app_test
+      SERVICE_PORT: 8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      mongo_test:
+        condition: service_healthy
+    volumes:
+        - ../../:/usr/src/app
+
+  # Тесты
+  tests:
+    build:
+      context: ../../
+    container_name: tests
+    environment:
+      MONGO_HOST: mongo_test
+      MONGO_PORT: 27017
+      SERVICE_HOST: app_test
+      SERVICE_PORT: 8000
+    depends_on:
+      app_test:
+        condition: service_started
+      mongo_test:
+        condition: service_healthy
+    volumes:
+      - ../../:/usr/src/app
+      - ../../reports:/usr/src/app/reports
+    command: >
+        sh -c "export PYTHONPATH=\$(pwd):\$PYTHONPATH
+        && python tests/functional/utils/waiters.py
+        && pytest tests/functional/src --log-cli-level=INFO -s"
+
+volumes:
+  mongodb_data:
