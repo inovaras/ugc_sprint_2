@@ -87,4 +87,4 @@ jobs:
           Repository: ${{ github.repository }}
           Workflow: ${{ github.workflow }}
 
-          🔗 [View Reports]($REPORTS_URL)"
+          View Reports: $REPORTS_URL"
