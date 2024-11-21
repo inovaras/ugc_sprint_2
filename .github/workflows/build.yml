@@ -65,13 +65,6 @@ jobs:
           name: pytest-report-${{ matrix.python-version }}
           path: reports/pytest
 
-      - name: Upload report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: reports
-          path: reports
-
   notify:
     needs: lint-and-test
     runs-on: ubuntu-latest
