@@ -67,11 +67,6 @@ jobs:
           name: pytest-report-${{ matrix.python-version }}
           path: app/reports/pytest
 
-      - name: Clean up reports folder in app
-        if: always()
-        run: |
-          rm -rf app/reports
-
   notify:
     needs: lint-and-test
     runs-on: ubuntu-latest
