@@ -56,6 +56,8 @@ jobs:
 
       - name: Run tests with Docker Compose
         run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
           mkdir -p reports/pytest
           docker-compose -f app/tests/functional/docker-compose.test.yaml up --abort-on-container-exit
           docker-compose -f app/tests/functional/docker-compose.test.yaml down
