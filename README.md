@@ -28,7 +28,7 @@ http://localhost:82/api/v1/ping/mongo
 После запуска основного приложения можно сгенерировать данные. Для этого необходимо запустить программу в папке generation, указав данные в аргументах запуска.
 Запускать можно в виртуальной среде с установленными библиотеками из файла `generation/requirements.txt`:
 ```
-python generation/main.py --mongo-url "mongodb://localhost:27019" --count-users 5000 --count-movies 1000 --count-ratings 20000 
+python generation/main.py --mongo-url "mongodb://localhost:27019" --count-users 5000 --count-movies 1000 --count-ratings 20000
 ```
 Для очистки всех данных можно использовать команду:
 ```
@@ -58,6 +58,13 @@ docker-compose -f app/tests/functional/docker-compose.yaml -p practicum_rating_t
 docker-compose -f app/tests/functional/docker-compose.yaml -p practicum_rating_test down -v
 docker image prune -f
 ```
+
+## Исследование
+```
+docker-compose -f research/docker-compose.yaml -p practicum_research up --build --abort-on-container-exit
+```
+В приложении выполняется исследование скорости записи и чтения из двух хранилищ: MongoDB и Postgres.
+Результаты исследования выводятся в файл [results.md](./research/results.md)
 
 ## Настройка вывода сообщений CI в Telegram
 

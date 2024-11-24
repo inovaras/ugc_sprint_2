@@ -38,8 +38,8 @@ async def generate_movies(count: int, batch_size: int) -> AsyncGenerator[List[Di
             "title": fake.sentence(nb_words=3),
             "release_year": randint(1950, 2024),
             "ratings": {
-                "average": 0,  # Заполним позже
-                "count": 0     # Заполним позже
+                "average": 0,
+                "count": 0
             }
         })
         if len(batch) == batch_size:

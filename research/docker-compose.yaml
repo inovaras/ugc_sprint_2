@@ -1,0 +1,68 @@
+x-app: &app
+  env_file:
+    - ./.env
+
+services:
+  mongo:
+    image: mongo:8.0
+    container_name: research_mongo
+    <<: *app
+    ports:
+      - "27000:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres:
+    image: postgres:14
+    container_name: research_postgres
+    <<: *app
+    ports:
+      - "54320:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app_mongo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: research_app_mongo
+    <<: *app
+    command: ["python", "main.py", "--storage", "mongodb", "--clear", "--count-ratings", "500", "--count-reviews", "500", "--count-bookmarks", "500", "--batch-size", "500"]
+    depends_on:
+      mongo:
+        condition: service_healthy
+    volumes:
+      - ./app:/app
+
+  app_postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: research_app_postgres
+    <<: *app
+    command: ["python", "main.py", "--storage", "postgres", "--clear", "--count-ratings", "500", "--count-reviews", "500", "--count-bookmarks", "500", "--batch-size", "500"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./app:/app
+
+volumes:
+  mongo_data:
+  postgres_data:

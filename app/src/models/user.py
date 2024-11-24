@@ -14,4 +14,3 @@ class User(BaseModel):
     name: str = Field(..., description="Имя пользователя")
     email: EmailStr = Field(..., description="Email пользователя")
     ratings: List[UserRating] = Field(default_factory=list, description="Список оценок пользователя")
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc), description="Дата регистрации")
