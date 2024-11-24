@@ -64,7 +64,7 @@ docker image prune -f
 docker-compose -f research/docker-compose.yaml -p practicum_research up --build --abort-on-container-exit
 ```
 В приложении выполняется исследование скорости записи и чтения из двух хранилищ: MongoDB и Postgres.
-Результаты исследования выводятся в файл [results.md](./research/results.md)
+Результаты исследования выводятся в файл [results.md](./research/app/results.md)
 
 ## Настройка вывода сообщений CI в Telegram
 
